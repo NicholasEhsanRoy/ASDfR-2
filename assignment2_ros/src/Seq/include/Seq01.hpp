@@ -15,7 +15,7 @@
 namespace Seq {
 
     struct OutputData {
-        int64_t gen_ts, random, loop_reception_ts, rt_ts;
+        int64_t random, gen_ts, loop_reception_ts, rt_ts;
     };
 
     class Seq01 : public rclcpp::Node {

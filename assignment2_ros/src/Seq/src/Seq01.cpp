@@ -48,7 +48,7 @@ namespace Seq {
                 std::ofstream file("assignment2-3-seq-data.csv");
                 if (file.is_open()) {
                     // Write header to the CSV (optional)
-                    file << "gen_ts,random,loop_reception_ts,rt_ts\n";
+                    file << "random,gen_ts,loop_reception_ts,rt_ts\n";
                     
                     // Loop through the static timestamps vector and write each timestamp to the file
                     for (size_t i = 0; i < 10000; ++i) {
@@ -61,10 +61,14 @@ namespace Seq {
                         d = this->data_vector[i].rt_ts / 1000000000.0;
 
                         // Write the timestamp as seconds with 10 decimal points
-                        file << std::fixed << std::setprecision(10) << a << ','
-                             << std::fixed << std::setprecision(10) << b << ',' 
-                             << std::fixed << std::setprecision(10) << c << ',' 
-                             << std::fixed << std::setprecision(10) << d << "\n";
+                        // file << std::fixed << std::setprecision(10) << a << ','
+                        //      << std::fixed << std::setprecision(10) << b << ',' 
+                        //      << std::fixed << std::setprecision(10) << c << ',' 
+                        //      << std::fixed << std::setprecision(10) << d << "\n";
+                        file << this->data_vector[i].random  << ','
+                             << this->data_vector[i].gen_ts  << ',' 
+                             << this->data_vector[i].loop_reception_ts  << ',' 
+                             << this->data_vector[i].rt_ts << "\n";
                     }
 
                     // Close the file

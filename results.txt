@@ -1,0 +1,28 @@
+Q1 Execution results No Load (Fixed to Core 0)
+Mean Execution Time: 0.0010782617 seconds
+Min Execution Time: 0.0010500120 seconds
+Max Execution Time: 0.0011913030 seconds
+Jitter (Standard Deviation): 0.0000034525 seconds
+
+Q1 Execution results with load (Fixed to Core 0)
+Mean Execution Time: 0.0010574471 seconds
+Min Execution Time: 0.0010126870 seconds
+Max Execution Time: 0.0010694070 seconds
+Jitter (Standard Deviation): 0.0000037347 seconds
+
+
+Q2 Execution results No Load (Fixed to Core 1)
+Mean Execution Time: 0.0000024373 seconds
+Min Execution Time: 0.0000023140 seconds
+Max Execution Time: 0.0000266480 seconds
+Jitter (Standard Deviation): 0.0000004033 seconds
+Final answer: 4.39868e+06
+
+Q2 Execution results with Load from linux (Fixed to Core 1)
+Mean Execution Time: 0.0000043512 seconds
+Min Execution Time: 0.0000019250 seconds
+Max Execution Time: 0.0120112200 seconds
+Jitter (Standard Deviation): 0.0001698088 seconds
+Final answer: 4.39868e+06
+
+

@@ -1,26 +1,54 @@
-cmake_minimum_required(VERSION 3.8)
-project(Seq)
+cmake_minimum_required(VERSION 3.5)
+
+project(Seq01)
+
+# Default to C++17
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(OpenCV REQUIRED COMPONENTS core highgui imgcodecs imgproc videoio)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
+add_library(${PROJECT_NAME} SHARED
+    src/Seq01.cpp
+)
+
+target_compile_definitions(${PROJECT_NAME}
+  PRIVATE "IMAGE_TOOLS_BUILDING_DLL")
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
+
+target_link_libraries(${PROJECT_NAME}
+  rclcpp::rclcpp
+  ${std_msgs_TARGETS}
+  rclcpp_components::component
+  )
+
+rclcpp_components_register_node(${PROJECT_NAME} PLUGIN "Seq::Seq01" EXECUTABLE seq01_node)
+
+install(
+  TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include)
+
+install(DIRECTORY include/ DESTINATION include/${PROJECT_NAME})
+
+ament_export_libraries(${PROJECT_NAME})
+
+ament_export_targets(${PROJECT_NAME})
 
 ament_package()

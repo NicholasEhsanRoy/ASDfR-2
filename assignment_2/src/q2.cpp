@@ -1,8 +1,8 @@
 
 #include <unistd.h> 
-// #include <evl/thread.h>
-// #include <evl/clock.h>
-// #include <evl/sched.h>
+#include <evl/thread.h>
+#include <evl/clock.h>
+#include <evl/sched.h>
 #include <pthread.h>
 #include <time.h>
 #include <iostream>
@@ -31,10 +31,10 @@ namespace Q2 {
         CPU_SET(1, &cpuset);
         Q2:: timestamps.resize(Q2::run_counter);
         timespec* timePtr = (Q2:: timestamps).data();
-        // int efd = evl_attach_self("/q2-evl-%d", getpid());
+        int efd = evl_attach_self("/q2-evl-%d", getpid());
         pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-        while (j++ < Q2::run_counter) {
-
+        // while (j++ < Q2::run_counter) {
+        while (true) {
             clock_gettime(CLOCK_MONOTONIC, &start);
             for (i = 1; i < 100; i++) {
                 a = i;
@@ -42,10 +42,10 @@ namespace Q2 {
                 c = i * 2.5;
                 final_answer += (a + b) / c;
             }
-            // evl_usleep(1000);
+            evl_usleep(1000);
             clock_gettime(CLOCK_MONOTONIC, &end);
-            timePtr[j-1].tv_nsec = (end.tv_nsec - start.tv_nsec);
-            timePtr[j-1].tv_sec = (end.tv_sec - start.tv_sec);
+            // timePtr[j-1].tv_nsec = (end.tv_nsec - start.tv_nsec);
+            // timePtr[j-1].tv_sec = (end.tv_sec - start.tv_sec);
         }
         pthread_mutex_unlock(&(Q2::mutex));
         return nullptr;
@@ -54,12 +54,19 @@ namespace Q2 {
     Q2::Q2() {
         pthread_mutex_init(&(Q2::mutex), nullptr);
         pthread_mutex_lock(&(Q2::mutex)); 
-        pthread_create(&thread, nullptr, q2_thread, nullptr);
+        pthread_attr_init(&attr);
+        pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
+        pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
+        struct sched_param param;
+        param.sched_priority = 10;
+        pthread_attr_setschedparam(&attr, &param);
+        pthread_create(&thread, &attr, q2_thread, nullptr);
     }
 
     Q2::~Q2() {
         pthread_join(thread, nullptr);
         pthread_mutex_destroy(&mutex);
+        pthread_attr_destroy(&attr);
     }
 
     void Q2::join() {

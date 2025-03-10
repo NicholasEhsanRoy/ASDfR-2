@@ -19,8 +19,11 @@ class Q2 {
         static void* q2_thread(void* arg);
         pthread_t thread;
         static pthread_mutex_t mutex;
+        pthread_attr_t attr;
+
 };
 }
 #endif //Q2_HPP
 
 // g++ main.cpp q2.cpp -o main $(pkg-config /usr/evl/lib/pkgconfig/evl.pc --cflags --libs)
+// evl ps -1
